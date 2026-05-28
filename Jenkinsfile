@@ -54,11 +54,19 @@ pipeline {
                 stage('Firefox Tests') {
                     steps {
                         sh """
-                            xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' \
+                            if command -v xvfb-run > /dev/null 2>&1; then
+                                xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' \
+                                    mvn clean test \
+                                        -Dbrowser=firefox \
+                                        -Dwebdriver.gecko.driver=${DRIVERS_LOC}/geckodriver \
+                                        -Dsurefire.reportNameSuffix=firefox
+                            else
+                                echo "WARNING: xvfb-run not found, running without virtual display (headless mode)"
                                 mvn clean test \
                                     -Dbrowser=firefox \
                                     -Dwebdriver.gecko.driver=${DRIVERS_LOC}/geckodriver \
                                     -Dsurefire.reportNameSuffix=firefox
+                            fi
                         """
                     }
                     post {
@@ -72,11 +80,19 @@ pipeline {
                 stage('Chrome Tests') {
                     steps {
                         sh """
-                            xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' \
+                            if command -v xvfb-run > /dev/null 2>&1; then
+                                xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' \
+                                    mvn clean test \
+                                        -Dbrowser=chrome \
+                                        -Dwebdriver.chrome.driver=${DRIVERS_LOC}/chromedriver \
+                                        -Dsurefire.reportNameSuffix=chrome
+                            else
+                                echo "WARNING: xvfb-run not found, running without virtual display (headless mode)"
                                 mvn clean test \
                                     -Dbrowser=chrome \
                                     -Dwebdriver.chrome.driver=${DRIVERS_LOC}/chromedriver \
                                     -Dsurefire.reportNameSuffix=chrome
+                            fi
                         """
                     }
                     post {

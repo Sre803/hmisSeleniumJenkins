@@ -15,7 +15,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <selenium.version>4.21.0</selenium.version>
+        <selenium.version>4.28.0</selenium.version>
         <junit.version>4.13.2</junit.version>
         <surefire.version>3.5.4</surefire.version>
         <!-- default browser; override with -Dbrowser=chrome -->
@@ -35,6 +35,7 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -44,10 +45,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
-                    <systemPropertyVariables>
-                        <browser>${browser}</browser>
-                    </systemPropertyVariables>
-                    <!-- allows -Dsurefire.reportNameSuffix=firefox|chrome from CLI -->
+                    <!-- browser and surefire.reportNameSuffix are passed via -D on the command line -->
                     <reportNameSuffix>${surefire.reportNameSuffix}</reportNameSuffix>
                     <includes>
                         <include>**/*Test.java</include>
